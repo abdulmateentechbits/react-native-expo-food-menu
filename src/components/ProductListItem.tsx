@@ -12,7 +12,6 @@ type ProductListItemProps = {
 export const defaultPizzaImage = 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png';
 
 const ProductListItem = ({ product }: ProductListItemProps) => {
-    console.log("🚀 ~ ProductListItem ~ props:", product)
 
     return (
         <Link href={`/menu/${product.id}`} asChild>
