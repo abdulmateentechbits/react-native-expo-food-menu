@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { TextInput } from 'react-native-paper'
 import Button from '@/src/components/Button';
 import { Link, Stack } from 'expo-router';
-// import { supabase } from '@/src/lib/supabase';
+import { supabase } from '@/src/lib/supabase';
 
 const SignIn = () => {
 
@@ -16,22 +16,22 @@ const SignIn = () => {
 
 
     const onSignIn = async () => {
-        // setIsLoading(true);
-        // try {
-        // const result =  await supabase.auth.signInWithPassword({
-        //      email: email,
-        //      password: password
-        //  })
-        //  if(result?.data?.user){
-        //      setEmail("");
-        //      setPassword("")
-        //  }
-        //  setIsLoading(false);
-        // } catch (error) {
-        //  setIsLoading(false);
-        //  console.log("🚀 ~ onSignUp ~ error:", error)
+        setIsLoading(true);
+        try {
+        const result =  await supabase.auth.signInWithPassword({
+             email: email,
+             password: password
+         })
+         if(result?.data?.user){
+             setEmail("");
+             setPassword("")
+         }
+         setIsLoading(false);
+        } catch (error) {
+         setIsLoading(false);
+         console.log("🚀 ~ onSignUp ~ error:", error)
          
-        // }
+        }
     }
     const goToSignUp =  () => {}
 
