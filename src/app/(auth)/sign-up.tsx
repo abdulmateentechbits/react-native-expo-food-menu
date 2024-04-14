@@ -10,7 +10,7 @@ const SignUp = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const [errors, setErrors] = useState("");
+    const [errors, setErrors] = useState<string | undefined>("");
 
     const [isLoading,setIsLoading] = useState(false);
 
@@ -25,6 +25,8 @@ const SignUp = () => {
         if(result?.data?.user){
             setEmail("");
             setPassword("")
+        }else{
+            setErrors(result?.error?.message)
         }
         setIsLoading(false);
        } catch (error) {

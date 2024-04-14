@@ -10,7 +10,7 @@ const SignIn = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const [errors, setErrors] = useState("");
+    const [errors, setErrors] = useState<string | undefined>("");
 
     const [isLoading,setIsLoading] = useState(false);
 
@@ -22,9 +22,12 @@ const SignIn = () => {
              email: email,
              password: password
          })
+         console.log("🚀 ~ onSignIn ~ result:", result)
          if(result?.data?.user){
              setEmail("");
              setPassword("")
+         }else{
+             setErrors(result?.error?.message)
          }
          setIsLoading(false);
         } catch (error) {

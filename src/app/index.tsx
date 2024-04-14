@@ -7,15 +7,22 @@ import { ActivityIndicator } from 'react-native-paper';
 import { supabase } from '../lib/supabase';
 
 const index = () => {
-  const {session,sessionLoading} = useAuth();
+  const { session, sessionLoading, isAdmin, profile } = useAuth();
 
-  if(sessionLoading){
+
+  if (sessionLoading) {
     return <ActivityIndicator />
   }
 
-  if(!session){
+  if (!session) {
     return <Redirect href={'/sign-in'} />
   }
+
+  if (!isAdmin) {
+    return <Redirect href={'/(user)'} />
+  }
+
+
   return (
     <View style={{ flex: 1, justifyContent: 'center', padding: 10 }}>
       <Link href={'/(user)'} asChild>
@@ -24,10 +31,7 @@ const index = () => {
       <Link href={'/(admin)'} asChild>
         <Button text="Admin" />
       </Link>
-      <Link href={'/(auth)/sign-in'} asChild>
-        <Button text="Sign In" />
-      </Link>
-      <Button text='Sign Out' onPress={()=>supabase.auth.signOut()} />
+      <Button text='Sign Out' onPress={() => supabase.auth.signOut()} />
     </View>
   );
 };
