@@ -1,12 +1,13 @@
 import { Alert, StyleSheet, View } from 'react-native'
 import React, { useState } from 'react'
-import { Stack, useLocalSearchParams } from 'expo-router';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { Divider, TextInput, Text } from 'react-native-paper'
 import * as ImagePicker from 'expo-image-picker';
 
 import Button from '@/src/components/Button';
 import { Image } from 'expo-image';
 import Colors from '@/src/constants/Colors';
+import { useInsertProduct } from '@/src/api/products';
 
 const blurhash =
     '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
@@ -15,6 +16,8 @@ const bgImage = "https://img.freepik.com/free-vector/pizza_1176-232.jpg";
 
 const ProductCreateScreen = () => {
   const [image, setImage] = useState<string | null>();
+  const router = useRouter();
+  const {mutate:insertProduct} = useInsertProduct();
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -61,7 +64,21 @@ const ProductCreateScreen = () => {
     if (!validateInput()) {
       return;
     }
+    insertProduct({
+      name: name,
+      price: parseFloat(price),
+      image: image
+    },{
+      onSuccess: () => {
+        resetFields();
+        setImage(null);
+        router.push("/(admin)/menu")
 
+      },
+      onError: (error) => {
+        setErrors(error.message);
+      }
+    })
     console.log("Create Product!  ");
     resetFields()
   }
