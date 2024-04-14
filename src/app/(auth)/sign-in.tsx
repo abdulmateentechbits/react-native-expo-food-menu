@@ -22,7 +22,6 @@ const SignIn = () => {
              email: email,
              password: password
          })
-         console.log("🚀 ~ onSignIn ~ result:", result)
          if(result?.data?.user){
              setEmail("");
              setPassword("")

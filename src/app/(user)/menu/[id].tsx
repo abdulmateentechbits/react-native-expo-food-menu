@@ -1,34 +1,42 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
-import products from '@/assets/data/products';
-import { PizzaSize, Product } from '@/src/types';
+import { PizzaSize } from '@/src/types';
 import { defaultPizzaImage } from '@/src/components/ProductListItem';
 import Colors from '@/src/constants/Colors';
 import Button from '@/src/components/Button';
 import { useCart } from '@/src/Provider/CartProvider';
+import { useProduct } from '@/src/api/products';
+import { ActivityIndicator } from 'react-native-paper';
 
-const sizes:PizzaSize[] = ["S", "M", "L", "XL"];
+const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
 
 
 const ProductDetailScreen = () => {
   const { id } = useLocalSearchParams();
+  const { data: product, error, isLoading } = useProduct(Number(id));
+
   const [selectedSize, setSelectedSize] = useState<PizzaSize>("M");
-  const {addItem} = useCart();
+  const { addItem } = useCart();
   const router = useRouter();
 
-  const product = products.find((item: Product) => item.id.toString() === id);
-  const addToCart = ()=>{
-    if(!product) return;
-    addItem(product,selectedSize);
+
+
+
+  const addToCart = () => {
+    if (!product) return;
+    addItem(product, selectedSize);
     router.push("/cart");
 
   }
-  if (!product) {
-    return <Text>Product Not Found</Text>
+
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
+  if (error) {
+    return <Text>Error: {error.message}</Text>;
   }
 
- 
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: `${product.name}` }} />
@@ -46,7 +54,7 @@ const ProductDetailScreen = () => {
         </View>
       </View>
       <Text style={styles.price}>${product.price}</Text>
-      <Button onPress={addToCart} text='Add to Cart'/>
+      <Button onPress={addToCart} text='Add to Cart' />
     </View>
   )
 }
@@ -67,7 +75,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: Colors.light.tint,
-    marginTop:'auto'
+    marginTop: 'auto'
   },
   sizeWrapper: {
     marginTop: 10

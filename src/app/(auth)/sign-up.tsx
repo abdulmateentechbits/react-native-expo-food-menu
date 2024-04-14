@@ -21,7 +21,6 @@ const SignUp = () => {
             email: email,
             password: password
         })
-        console.log("🚀 ~ onSignUp ~ result:", result)
         if(result?.data?.user){
             setEmail("");
             setPassword("")
